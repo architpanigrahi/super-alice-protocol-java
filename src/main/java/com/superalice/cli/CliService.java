@@ -11,7 +11,7 @@ import static com.superalice.cli.CliConstant.*;
 @Slf4j
 public class CliService {
 
-    public static void parseArguments(String[] args) {
+    public static void parseArguments(String[] args, String hostAddress) {
         Options options = new Options();
 
         options.addOption(HELP_OPTION_SHORT, HELP_OPTION_LONG, false, "Print this message");
@@ -44,8 +44,9 @@ public class CliService {
                 bootstrapAddress = cmd.getOptionValue(BOOTSTRAP_OPTION_SHORT);
             }
 
-            Peer peer = PeerFactory.createPeer(peerType, port, bootstrapAddress);
-            log.info("Starting {}", peer.getPeerType());
+            Peer peer = PeerFactory.createPeer(peerType, hostAddress, port, bootstrapAddress);
+            peer.startPeer();
+            log.info("Starting {}", peer);
         } catch (Exception e) {
             log.error("Error parsing arguments: {}", e.getMessage());
             formatter.printHelp("superalice", options);

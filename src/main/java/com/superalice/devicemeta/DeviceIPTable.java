@@ -1,16 +1,13 @@
 package com.superalice.devicemeta;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
-@AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class DeviceIPTable implements Serializable {
 
-    private Map<Integer, String> table;
+    private Map<Integer, DeviceIPTypeEntry> table = new HashMap<>();
 }

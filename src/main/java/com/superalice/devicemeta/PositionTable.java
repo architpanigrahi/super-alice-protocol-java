@@ -1,17 +1,14 @@
 package com.superalice.devicemeta;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
-@AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class PositionTable implements Serializable {
 
-    private Map<Integer, PositionEntry> table;
+    private Map<Integer, PositionEntry> table = new HashMap<>();
 
 }

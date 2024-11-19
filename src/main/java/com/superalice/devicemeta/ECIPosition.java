@@ -1,14 +1,10 @@
 package com.superalice.devicemeta;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
-@AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class ECIPosition implements Serializable {
 
     private Double x;

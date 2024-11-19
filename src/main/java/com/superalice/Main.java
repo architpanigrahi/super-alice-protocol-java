@@ -10,7 +10,7 @@ import java.util.Enumeration;
 public class Main {
 
     public static void main(String[] args) {
-        CliService.parseArguments(args);
+        String hostAddress = null;
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
             while (interfaces.hasMoreElements()) {
@@ -21,10 +21,12 @@ public class Main {
                 while (addresses.hasMoreElements()) {
                     InetAddress addr = addresses.nextElement();
                     if (addr.isSiteLocalAddress()) {
+                        hostAddress = addr.getHostAddress();
                         System.out.println("Local IP Address: " + addr.getHostAddress());
                     }
                 }
             }
+            CliService.parseArguments(args, hostAddress);
         } catch (Exception e) {
             System.err.println("Error fetching local IP: " + e.getMessage());
         }
