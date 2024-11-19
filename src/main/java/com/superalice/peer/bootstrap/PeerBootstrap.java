@@ -14,7 +14,7 @@ public class PeerBootstrap extends Peer {
 
     @Override
     public void startPeer() {
-        Thread thread = new Thread(new PeerBootstrapListenerThread(this.port, this.deviceIPTable, this.positionTable));
+        Thread thread = new Thread(new PeerBootstrapListenerThread(this));
         thread.start();
 
         // Test

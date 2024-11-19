@@ -13,6 +13,8 @@ public class PeerSatellite extends Peer {
     @Override
     public void startPeer() {
 
+        Thread thread = new Thread(new PeerSatelliteListenerThread(this));
+        thread.start();
     }
 
 }

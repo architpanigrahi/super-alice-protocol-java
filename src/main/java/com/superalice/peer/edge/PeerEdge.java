@@ -12,7 +12,8 @@ public class PeerEdge extends Peer {
 
     @Override
     public void startPeer() {
-
+        Thread thread = new Thread(new PeerEdgeListenerThread(this));
+        thread.start();
     }
 
 }

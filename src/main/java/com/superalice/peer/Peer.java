@@ -16,13 +16,12 @@ public abstract class Peer {
     public PositionTable positionTable;
     public String hostIP;
     public Integer port;
+    public String bootstrapAddress;
 
 
     public abstract String getPeerType();
-    public abstract void startPeer();
-//    public abstract void setDeviceAddress(String hostIP, int port);
-//    public abstract void setBootstrapAddress(String bootstrapIP, int bootstrapPort);
 
+    public abstract void startPeer();
 
 
 }

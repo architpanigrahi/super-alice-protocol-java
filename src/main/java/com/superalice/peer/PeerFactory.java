@@ -17,12 +17,12 @@ public class PeerFactory {
         }
 
         switch (peerType) {
-            case EDGE:
-                return new PeerEdge();
             case BOOTSTRAP:
                 return createPeerBootstrap(hostAddress, port);
             case SATELLITE:
-                return new PeerSatellite();
+                return createPeerSatellite(hostAddress, port, bootstrapAddress);
+            case EDGE:
+                return createPeerEdge(hostAddress, port, bootstrapAddress);
             default:
                 throw new IllegalArgumentException("Unknown peer type: " + peerTypeName);
         }
@@ -36,6 +36,26 @@ public class PeerFactory {
         bootstrapPeer.setDeviceIPTable(new DeviceIPTable());
         bootstrapPeer.setPositionTable(new PositionTable());
         return bootstrapPeer;
+    }
+
+    private static Peer createPeerSatellite(String hostAddress, int port, String bootstrapAddress) {
+        Peer satellitePeer = new PeerSatellite();
+        satellitePeer.setHostIP(hostAddress);
+        satellitePeer.setPort(port);
+        satellitePeer.setDeviceIPTable(new DeviceIPTable());
+        satellitePeer.setPositionTable(new PositionTable());
+        satellitePeer.setBootstrapAddress(bootstrapAddress);
+        return satellitePeer;
+    }
+
+    private static Peer createPeerEdge(String hostAddress, int port, String bootstrapAddress) {
+        Peer edgePeer = new PeerEdge();
+        edgePeer.setHostIP(hostAddress);
+        edgePeer.setPort(port);
+        edgePeer.setDeviceIPTable(new DeviceIPTable());
+        edgePeer.setPositionTable(new PositionTable());
+        edgePeer.setBootstrapAddress(bootstrapAddress);
+        return edgePeer;
     }
 
 }
