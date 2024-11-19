@@ -11,11 +11,11 @@ public enum PacketType {
     DATA((byte) 1),
     ACK((byte) 2),
     NACK((byte) 3),
-    CONTROL((byte) 5),
-    ERROR((byte) 6),
-    KEEP_ALIVE((byte) 7),
-    DISCOVERY((byte) 8),
-    DISCOVERY_RESPONSE((byte) 9);
+    CONTROL((byte) 4),
+    ERROR((byte) 5),
+    KEEP_ALIVE((byte) 6),
+    DISCOVERY((byte) 7),
+    DISCOVERY_RESPONSE((byte) 8);
 
     private final byte code;
 
