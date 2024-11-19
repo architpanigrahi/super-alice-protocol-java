@@ -1,20 +1,18 @@
 package com.superalice.peer;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum PeerType {
 
-    BOOTSTRAP("BOOTSTRAP_NODE"),
-    SATELLITE("SATELLITE"),
-    EDGE("EDGE_DEVICE");
+    BOOTSTRAP("BOOTSTRAP_NODE", 1),
+    SATELLITE("SATELLITE", 2),
+    EDGE("EDGE_DEVICE", 3);
 
     private final String name;
-
-    PeerType(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
+    private final int id;
 
     public static PeerType getPeerType(String peerType) {
         for (PeerType type : PeerType.values()) {
@@ -24,6 +22,10 @@ public enum PeerType {
         }
         return null;
     }
+
+//    public static String getPeerType(int id) {
+//
+//    }
 
 
 }
