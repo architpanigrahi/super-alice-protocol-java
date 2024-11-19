@@ -3,13 +3,9 @@ package com.superalice.packet.payload;
 import com.superalice.devicemeta.ECIPosition;
 import lombok.Data;
 
-import java.io.Serializable;
-
 @Data
-public class DiscoveryPayload implements Serializable {
+public class KeepAlivePayload {
 
-    private Byte peerTypeId;
     private ECIPosition eciPosition;
-
 
 }

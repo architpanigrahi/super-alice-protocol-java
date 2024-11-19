@@ -1,57 +1,60 @@
 package com.superalice.packet.serdes;
 
 import com.superalice.devicemeta.ECIPosition;
-import com.superalice.packet.payload.DiscoveryPayload;
+import com.superalice.packet.payload.HandshakePayload;
 
 import java.nio.ByteBuffer;
 
-public class DiscoveryPayloadSerDes implements PayloadSerDes<DiscoveryPayload> {
+public class HandshakePayloadSerDes implements PayloadSerDes<HandshakePayload> {
 
     /**
-     * Serialize DiscoveryPayload
-     * Total of 25 bytes -> 1 byte of peer type id and 24 bytes of x, y and z.
+     * Serialize HandshakePayload
+     * Total of 31 bytes -> 4 bytes of IP host, 2 bytes for port, 1 byte for peerTypeId and 24 bytes for coordinates
      * @param payload
      * @return
      */
     @Override
-    public byte[] serialize(DiscoveryPayload payload) {
+    public byte[] serialize(HandshakePayload payload) {
+        int hostIP = payload.getHostIP();
+        short hostPort = payload.getHostPort();
         byte peerTypeId = payload.getPeerTypeId();
+
         ECIPosition eciPosition = payload.getEciPosition();
         double x = eciPosition != null && eciPosition.getX() != null ? eciPosition.getX() : 0.0;
         double y = eciPosition != null && eciPosition.getY() != null ? eciPosition.getY() : 0.0;
         double z = eciPosition != null && eciPosition.getZ() != null ? eciPosition.getZ() : 0.0;
 
-        ByteBuffer buffer = ByteBuffer.allocate(25);
+        ByteBuffer buffer = ByteBuffer.allocate(31);
+        buffer.putInt(hostIP);
+        buffer.putShort(hostPort);
         buffer.put(peerTypeId);
         buffer.putDouble(x);
         buffer.putDouble(y);
         buffer.putDouble(z);
+
         return buffer.array();
     }
 
-
     /**
-     * Deserialize DiscoveryPayload
+     * Deserialize HandshakePayload
      * @param bytes
      * @return
      */
     @Override
-    public DiscoveryPayload deserialize(byte[] bytes) {
+    public HandshakePayload deserialize(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
-        DiscoveryPayload payload = new DiscoveryPayload();
+        HandshakePayload payload = new HandshakePayload();
 
-        byte peerTypeId = buffer.get();
-        double x = buffer.getDouble();
-        double y = buffer.getDouble();
-        double z = buffer.getDouble();
+        payload.setHostIP(buffer.getInt());
+        payload.setHostPort(buffer.getShort());
+        payload.setPeerTypeId(buffer.get());
 
         ECIPosition eciPosition = new ECIPosition();
-        eciPosition.setX(x);
-        eciPosition.setY(y);
-        eciPosition.setZ(z);
-
-        payload.setPeerTypeId(peerTypeId);
+        eciPosition.setX(buffer.getDouble());
+        eciPosition.setY(buffer.getDouble());
+        eciPosition.setZ(buffer.getDouble());
         payload.setEciPosition(eciPosition);
+
 
         return payload;
     }

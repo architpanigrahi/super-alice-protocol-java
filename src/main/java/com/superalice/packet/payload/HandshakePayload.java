@@ -4,12 +4,11 @@ import com.superalice.devicemeta.ECIPosition;
 import lombok.Data;
 
 @Data
-public class DiscoveryResponsePeerEntryPayload {
+public class HandshakePayload {
 
-    private Integer deviceId;
+    private Integer hostIP;
+    private Short hostPort;
     private Byte peerTypeId;
-    private Integer peerIP;
-    private Short peerPort;
-
+    private ECIPosition eciPosition;
 
 }
