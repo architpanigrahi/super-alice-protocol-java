@@ -11,7 +11,6 @@ public class Packet {
     private Byte priority;
     private Integer sequenceNumber;
     private Long timestamp;
-    private Short fragmentId;
     private Short fragmentIndex;
     private Short totalFragments;
     private Short crc;
