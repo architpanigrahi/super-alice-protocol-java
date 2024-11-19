@@ -1,14 +1,8 @@
 package com.superalice.packet;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import java.util.List;
-
-@AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class Packet {
 
     private Integer sourceId;
@@ -23,6 +17,6 @@ public class Packet {
     private Short crc;
     private Short reserved;
     private Short payloadType;
-    private List<Byte> payload;
+    private byte[] payload;
 
 }
