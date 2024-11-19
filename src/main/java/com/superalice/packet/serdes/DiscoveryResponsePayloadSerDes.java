@@ -1,6 +1,5 @@
 package com.superalice.packet.serdes;
 
-import com.superalice.devicemeta.ECIPosition;
 import com.superalice.packet.payload.DiscoveryResponsePayload;
 import com.superalice.packet.payload.DiscoveryResponsePeerEntryPayload;
 
@@ -12,6 +11,7 @@ public class DiscoveryResponsePayloadSerDes implements PayloadSerDes<DiscoveryRe
     /**
      * Serialize DiscoveryResponsePayload
      * Total of  = 11 bytes * n
+     *
      * @param payload
      * @return
      */
@@ -32,6 +32,7 @@ public class DiscoveryResponsePayloadSerDes implements PayloadSerDes<DiscoveryRe
 
     /**
      * Deserialize DiscoveryResponsePayload
+     *
      * @param bytes
      * @return
      */
