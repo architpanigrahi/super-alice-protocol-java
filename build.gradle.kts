@@ -23,6 +23,9 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.9")
     implementation("org.slf4j:slf4j-simple:2.0.9")
 
+    // Jackson - Json Utils
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
+
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
