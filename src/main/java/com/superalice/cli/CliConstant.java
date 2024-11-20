@@ -11,5 +11,7 @@ public class CliConstant {
     public static final String PORT_OPTION_LONG = "port";
     public static final String BOOTSTRAP_OPTION_SHORT = "b";
     public static final String BOOTSTRAP_OPTION_LONG = "bootstrap";
+    public static final String DEVICE_ID_OPTION_SHORT = "i";
+    public static final String DEVICE_ID_OPTION_LONG = "id";
 
 }

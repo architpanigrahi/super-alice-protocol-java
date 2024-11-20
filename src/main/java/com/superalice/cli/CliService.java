@@ -18,6 +18,7 @@ public class CliService {
         options.addOption(TYPE_OPTION_SHORT, TYPE_OPTION_LONG, true, getPeerTypeDescription());
         options.addOption(PORT_OPTION_SHORT, PORT_OPTION_LONG, true, getPortDescription());
         options.addOption(BOOTSTRAP_OPTION_SHORT, BOOTSTRAP_OPTION_LONG, true, getBootstrapDescription());
+        options.addOption(DEVICE_ID_OPTION_SHORT, DEVICE_ID_OPTION_LONG, true, getDeviceIdDescription());
 
 
         CommandLineParser parser = new DefaultParser();
@@ -38,13 +39,18 @@ public class CliService {
             String peerType = cmd.getOptionValue(TYPE_OPTION_SHORT);;
             int port = Integer.parseInt(cmd.getOptionValue(PORT_OPTION_SHORT));
             String bootstrapAddress = null;
+            Integer deviceId = null;
 
             // Update bootstrap address if available
             if (cmd.hasOption(BOOTSTRAP_OPTION_SHORT)) {
                 bootstrapAddress = cmd.getOptionValue(BOOTSTRAP_OPTION_SHORT);
             }
 
-            Peer peer = PeerFactory.createPeer(peerType, hostAddress, port, bootstrapAddress);
+            if (cmd.hasOption(DEVICE_ID_OPTION_SHORT)) {
+                deviceId = Integer.parseInt(cmd.getOptionValue(DEVICE_ID_OPTION_SHORT).trim());
+            }
+
+            Peer peer = PeerFactory.createPeer(peerType, hostAddress, port, bootstrapAddress, deviceId);
             peer.startPeer();
             log.info("Starting {}", peer);
         } catch (Exception e) {
@@ -71,6 +77,10 @@ public class CliService {
                     log.error("bootstrap address is mandatory for edge and satellite peers");
                     throw new IllegalArgumentException("bootstrap address is mandatory");
                 }
+                if (!cmd.hasOption(DEVICE_ID_OPTION_SHORT)) {
+                    log.error("device id is mandatory");
+                    throw new IllegalArgumentException("device id is mandatory");
+                }
             }
 
         }
@@ -86,6 +96,10 @@ public class CliService {
 
     private static String getBootstrapDescription() {
         return "Bootstrap device address - Format - <host>:<port>";
+    }
+
+    private static String getDeviceIdDescription() {
+        return "Device ID - If satellite device, then use value more than 1000000; If Edge device, then use value less than 1000000";
     }
 
 }

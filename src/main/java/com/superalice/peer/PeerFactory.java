@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PeerFactory {
 
-    public static Peer createPeer(String peerTypeName, String hostAddress, int port, String bootstrapAddress) {
+    public static Peer createPeer(String peerTypeName, String hostAddress, int port, String bootstrapAddress, Integer deviceId) {
         PeerType peerType = PeerType.getPeerType(peerTypeName);
         if (peerType == null) {
             throw new IllegalArgumentException("Unknown peer type: " + peerTypeName);
@@ -20,9 +20,9 @@ public class PeerFactory {
             case BOOTSTRAP:
                 return createPeerBootstrap(hostAddress, port);
             case SATELLITE:
-                return createPeerSatellite(hostAddress, port, bootstrapAddress);
+                return createPeerSatellite(hostAddress, port, bootstrapAddress, deviceId);
             case EDGE:
-                return createPeerEdge(hostAddress, port, bootstrapAddress);
+                return createPeerEdge(hostAddress, port, bootstrapAddress, deviceId);
             default:
                 throw new IllegalArgumentException("Unknown peer type: " + peerTypeName);
         }
@@ -38,8 +38,9 @@ public class PeerFactory {
         return bootstrapPeer;
     }
 
-    private static Peer createPeerSatellite(String hostAddress, int port, String bootstrapAddress) {
+    private static Peer createPeerSatellite(String hostAddress, int port, String bootstrapAddress, Integer deviceId) {
         Peer satellitePeer = new PeerSatellite();
+        satellitePeer.setDeviceId(deviceId);
         satellitePeer.setHostIP(hostAddress);
         satellitePeer.setPort(port);
         satellitePeer.setDeviceIPTable(new DeviceIPTable());
@@ -48,8 +49,9 @@ public class PeerFactory {
         return satellitePeer;
     }
 
-    private static Peer createPeerEdge(String hostAddress, int port, String bootstrapAddress) {
+    private static Peer createPeerEdge(String hostAddress, int port, String bootstrapAddress, Integer deviceId) {
         Peer edgePeer = new PeerEdge();
+        edgePeer.setDeviceId(deviceId);
         edgePeer.setHostIP(hostAddress);
         edgePeer.setPort(port);
         edgePeer.setDeviceIPTable(new DeviceIPTable());
