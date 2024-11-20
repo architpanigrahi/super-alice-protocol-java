@@ -17,4 +17,13 @@ public enum PacketType {
 
     private final byte code;
 
+    public static PacketType getPacketType(byte code) {
+        for (PacketType packetType : values()) {
+            if (packetType.getCode() == code) {
+                return packetType;
+            }
+        }
+        return null;
+    }
+
 }
