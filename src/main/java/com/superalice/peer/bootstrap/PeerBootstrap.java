@@ -23,7 +23,7 @@ public class PeerBootstrap extends Peer {
                 log.info("Current Device IP table {}", this.deviceIPTable);
                 log.info("Current Position Table {}", this.positionTable);
                 try {
-                    Thread.sleep(10000); // Sleep for 5 seconds
+                    Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     log.error("Thread interrupted", e);
                 }

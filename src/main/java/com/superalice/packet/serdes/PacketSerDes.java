@@ -44,7 +44,9 @@ public class PacketSerDes {
         packet.setCrc(buffer.getShort());
         packet.setReserved(buffer.getShort());
         packet.setPayloadType(buffer.getShort());
-        packet.setPayload(bytes);
+        byte[] payload = new byte[buffer.remaining()];
+        buffer.get(payload);
+        packet.setPayload(payload);
         return packet;
     }
 

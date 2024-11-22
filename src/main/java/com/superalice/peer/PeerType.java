@@ -7,12 +7,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum PeerType {
 
-    BOOTSTRAP("BOOTSTRAP_NODE", 1),
-    SATELLITE("SATELLITE", 2),
-    EDGE("EDGE_DEVICE", 3);
+    BOOTSTRAP("BOOTSTRAP_NODE", (byte) 1),
+    SATELLITE("SATELLITE", (byte) 2),
+    EDGE("EDGE_DEVICE", (byte) 3);
 
     private final String name;
-    private final int id;
+    private final byte id;
 
     public static PeerType getPeerType(String peerType) {
         for (PeerType type : PeerType.values()) {
