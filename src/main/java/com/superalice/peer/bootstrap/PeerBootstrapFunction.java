@@ -7,7 +7,9 @@ import com.superalice.packet.Packet;
 import com.superalice.packet.PacketType;
 import com.superalice.packet.payload.DiscoveryResponsePeerEntryPayload;
 import com.superalice.packet.payload.HandshakePayload;
+import com.superalice.packet.payload.KeepAlivePayload;
 import com.superalice.packet.serdes.HandshakePayloadSerDes;
+import com.superalice.packet.serdes.KeepAlivePayloadSerDes;
 import com.superalice.packet.serdes.PacketSerDes;
 import com.superalice.positionservice.ECIPositionService;
 import lombok.extern.slf4j.Slf4j;
@@ -56,7 +58,17 @@ public class PeerBootstrapFunction {
     }
 
     private static void handleKeepAliveRequest(Packet packet, PeerBootstrap peer) {
+        KeepAlivePayload keepAlivePayload = new KeepAlivePayloadSerDes().deserialize(packet.getPayload());
+        log.info("Keep alive request received: {}", keepAlivePayload);
 
+        PositionEntry positionEntry = new PositionEntry();
+        positionEntry.setTimestamp(System.currentTimeMillis());
+        ECIPosition eciPosition = new ECIPosition();
+        eciPosition.setX(keepAlivePayload.getEciPosition().getX());
+        eciPosition.setY(keepAlivePayload.getEciPosition().getY());
+        eciPosition.setZ(keepAlivePayload.getEciPosition().getZ());
+        positionEntry.setEciPosition(eciPosition);
+        peer.positionTable.getTable().put(packet.getSourceId(), positionEntry);
     }
 
     private static void handleDiscoveryRequest(Packet packet, PeerBootstrap peer) {

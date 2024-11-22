@@ -83,9 +83,9 @@ public class PeerSatelliteFunction {
 
         KeepAlivePayload keepAlivePayload = new KeepAlivePayload();
         ECIPosition eciPosition = new ECIPosition();
-        eciPosition.setX(0.0);
-        eciPosition.setY(0.0);
-        eciPosition.setZ(0.0);
+        eciPosition.setX(new Random().nextDouble());
+        eciPosition.setY(new Random().nextDouble());
+        eciPosition.setZ(new Random().nextDouble());
         keepAlivePayload.setEciPosition(eciPosition); // TODO: Introduce mock current location
 
         byte[] payload = new KeepAlivePayloadSerDes().serialize(keepAlivePayload);
@@ -97,7 +97,7 @@ public class PeerSatelliteFunction {
             InetAddress bootstrapAddress = InetAddress.getByName(peerSatellite.getBootstrapAddress().split(":")[0]);
             int bootstrapPort = Integer.parseInt(peerSatellite.getBootstrapAddress().split(":")[1]);
             DatagramPacket datagramPacket = new DatagramPacket(packetBytes, packetBytes.length, bootstrapAddress, bootstrapPort);
-            log.info("Sending HANDSHAKE Packet to Bootstrap Server");
+            log.info("Sending KEEP_ALIVE Packet to Bootstrap Server");
             socket.send(datagramPacket);
         } catch (Exception e) {
             log.error("Error occurred while sending HANDSHAKE Packet to Bootstrap Server {}", e.getMessage());
@@ -106,7 +106,7 @@ public class PeerSatelliteFunction {
     }
 
     public static void sendDiscoveryRequest(PeerSatellite peerSatellite) {
-
+        log.info("Sending DISCOVERY REQUEST to Bootstrap Server");
     }
 
 }
