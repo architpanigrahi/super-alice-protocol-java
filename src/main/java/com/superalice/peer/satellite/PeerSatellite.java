@@ -15,14 +15,20 @@ public class PeerSatellite extends Peer {
     @Override
     public void startPeer() {
 
+        // **********************
         // Send handshake request
+        // **********************
         PeerSatelliteFunction.sendHandshakeRequest(this);
 
+        // ***************
         // Listener thread
+        // ***************
         Thread listenerThread = new Thread(new PeerSatelliteListenerThread(this));
         listenerThread.start();
 
+        // *****************
         // Keep alive thread
+        // *****************
         Thread keepAliveThread = new Thread(() -> {
             while (true) {
                 PeerSatelliteFunction.sendKeepAliveRequest(this);
@@ -35,12 +41,14 @@ public class PeerSatellite extends Peer {
         });
         keepAliveThread.start();
 
+        // ****************
         // Discovery thread
+        // ****************
         Thread discoveryThread = new Thread(() -> {
             while (true) {
                 PeerSatelliteFunction.sendDiscoveryRequest(this);
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(30000);
                 } catch (InterruptedException e) {
                     log.error("Thread interrupted", e);
                 }

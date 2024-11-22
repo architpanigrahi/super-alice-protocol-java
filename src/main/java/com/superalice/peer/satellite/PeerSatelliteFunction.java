@@ -4,7 +4,9 @@ import com.superalice.devicemeta.ECIPosition;
 import com.superalice.packet.Packet;
 import com.superalice.packet.PacketType;
 import com.superalice.packet.payload.HandshakePayload;
+import com.superalice.packet.payload.KeepAlivePayload;
 import com.superalice.packet.serdes.HandshakePayloadSerDes;
+import com.superalice.packet.serdes.KeepAlivePayloadSerDes;
 import com.superalice.packet.serdes.PacketSerDes;
 import com.superalice.peer.PeerType;
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +68,40 @@ public class PeerSatelliteFunction {
     }
 
     public static void sendKeepAliveRequest(PeerSatellite peerSatellite) {
+        Packet packet = new Packet();
+        packet.setSourceId(peerSatellite.getDeviceId());
+        packet.setDestinationId(BOOTSTRAP_DEVICE_ID);
+        packet.setPacketType(PacketType.KEEP_ALIVE);
+        packet.setPriority((byte) 1);
+        packet.setSequenceNumber(new Random().nextInt());
+        packet.setTimestamp(System.currentTimeMillis());
+        packet.setFragmentIndex((short) 0);
+        packet.setTotalFragments((short) 1);
+        packet.setCrc((short) 0);
+        packet.setReserved((short) 0);
+        packet.setPayloadType((short) 0);
+
+        KeepAlivePayload keepAlivePayload = new KeepAlivePayload();
+        ECIPosition eciPosition = new ECIPosition();
+        eciPosition.setX(0.0);
+        eciPosition.setY(0.0);
+        eciPosition.setZ(0.0);
+        keepAlivePayload.setEciPosition(eciPosition); // TODO: Introduce mock current location
+
+        byte[] payload = new KeepAlivePayloadSerDes().serialize(keepAlivePayload);
+        packet.setPayload(payload);
+
+        byte[] packetBytes = PacketSerDes.serialize(packet);
+
+        try (DatagramSocket socket = new DatagramSocket()) {
+            InetAddress bootstrapAddress = InetAddress.getByName(peerSatellite.getBootstrapAddress().split(":")[0]);
+            int bootstrapPort = Integer.parseInt(peerSatellite.getBootstrapAddress().split(":")[1]);
+            DatagramPacket datagramPacket = new DatagramPacket(packetBytes, packetBytes.length, bootstrapAddress, bootstrapPort);
+            log.info("Sending HANDSHAKE Packet to Bootstrap Server");
+            socket.send(datagramPacket);
+        } catch (Exception e) {
+            log.error("Error occurred while sending HANDSHAKE Packet to Bootstrap Server {}", e.getMessage());
+        }
 
     }
 

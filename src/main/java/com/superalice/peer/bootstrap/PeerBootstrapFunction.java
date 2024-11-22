@@ -26,8 +26,13 @@ public class PeerBootstrapFunction {
         switch (packetType) {
             case HANDSHAKE:
                 handleHandshakeRequest(packet, peer);
+                break;
+            case KEEP_ALIVE:
+                handleKeepAliveRequest(packet, peer);
+                break;
             case DISCOVERY:
                 handleDiscoveryRequest(packet, peer);
+                break;
         }
     }
 
@@ -48,6 +53,10 @@ public class PeerBootstrapFunction {
         eciPosition.setZ(handshakePayload.getEciPosition().getZ());
         positionEntry.setEciPosition(eciPosition);
         peer.positionTable.getTable().put(packet.getSourceId(), positionEntry);
+    }
+
+    private static void handleKeepAliveRequest(Packet packet, PeerBootstrap peer) {
+
     }
 
     private static void handleDiscoveryRequest(Packet packet, PeerBootstrap peer) {
