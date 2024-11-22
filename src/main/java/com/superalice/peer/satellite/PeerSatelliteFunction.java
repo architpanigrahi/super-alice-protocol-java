@@ -100,13 +100,36 @@ public class PeerSatelliteFunction {
             log.info("Sending KEEP_ALIVE Packet to Bootstrap Server");
             socket.send(datagramPacket);
         } catch (Exception e) {
-            log.error("Error occurred while sending HANDSHAKE Packet to Bootstrap Server {}", e.getMessage());
+            log.error("Error occurred while sending KEEP_ALIVE Packet to Bootstrap Server {}", e.getMessage());
         }
 
     }
 
     public static void sendDiscoveryRequest(PeerSatellite peerSatellite) {
-        log.info("Sending DISCOVERY REQUEST to Bootstrap Server");
+        Packet packet = new Packet();
+        packet.setSourceId(peerSatellite.getDeviceId());
+        packet.setDestinationId(BOOTSTRAP_DEVICE_ID);
+        packet.setPacketType(PacketType.DISCOVERY);
+        packet.setPriority((byte) 1);
+        packet.setSequenceNumber(new Random().nextInt());
+        packet.setTimestamp(System.currentTimeMillis());
+        packet.setFragmentIndex((short) 0);
+        packet.setTotalFragments((short) 1);
+        packet.setCrc((short) 0);
+        packet.setReserved((short) 0);
+        packet.setPayloadType((short) 0);
+
+        byte[] packetBytes = PacketSerDes.serialize(packet);
+
+        try (DatagramSocket socket = new DatagramSocket()) {
+            InetAddress bootstrapAddress = InetAddress.getByName(peerSatellite.getBootstrapAddress().split(":")[0]);
+            int bootstrapPort = Integer.parseInt(peerSatellite.getBootstrapAddress().split(":")[1]);
+            DatagramPacket datagramPacket = new DatagramPacket(packetBytes, packetBytes.length, bootstrapAddress, bootstrapPort);
+            log.info("Sending DISCOVERY Packet to Bootstrap Server");
+            socket.send(datagramPacket);
+        } catch (Exception e) {
+            log.error("Error occurred while sending DISCOVERY Packet to Bootstrap Server {}", e.getMessage());
+        }
     }
 
 }

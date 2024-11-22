@@ -25,7 +25,9 @@ public class PacketSerDes {
         buffer.putShort(packet.getCrc());
         buffer.putShort(packet.getReserved());
         buffer.putShort(packet.getPayloadType());
-        buffer.put(packet.getPayload());
+        if (packet.getPayload().length > 0) {
+            buffer.put(packet.getPayload());
+        }
         return buffer.array();
     }
 

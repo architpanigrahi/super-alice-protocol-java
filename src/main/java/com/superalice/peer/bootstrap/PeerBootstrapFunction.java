@@ -5,6 +5,7 @@ import com.superalice.devicemeta.ECIPosition;
 import com.superalice.devicemeta.PositionEntry;
 import com.superalice.packet.Packet;
 import com.superalice.packet.PacketType;
+import com.superalice.packet.payload.DiscoveryResponsePayload;
 import com.superalice.packet.payload.DiscoveryResponsePeerEntryPayload;
 import com.superalice.packet.payload.HandshakePayload;
 import com.superalice.packet.payload.KeepAlivePayload;
@@ -14,6 +15,7 @@ import com.superalice.packet.serdes.PacketSerDes;
 import com.superalice.positionservice.ECIPositionService;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import static com.superalice.peer.serdes.IPHostAddressSerDes.deserialize;
@@ -72,10 +74,13 @@ public class PeerBootstrapFunction {
     }
 
     private static void handleDiscoveryRequest(Packet packet, PeerBootstrap peer) {
-        Integer sourceId = packet.getSourceId();
+        log.info("Discovery request received: {}", packet);
 
+        Integer sourceId = packet.getSourceId();
         // Prepare for Discovery Response Packet
         ECIPosition currentPosition = peer.positionTable.getTable().get(sourceId).getEciPosition();
+        DiscoveryResponsePayload discoveryResponsePayload = new DiscoveryResponsePayload();
+        discoveryResponsePayload.setPeerEntries(new ArrayList<>());
         for (Map.Entry<Integer, PositionEntry> entry : peer.positionTable.getTable().entrySet()) {
             PositionEntry positionEntry = entry.getValue();
             Double distance = ECIPositionService.calculateDistance(currentPosition, positionEntry.getEciPosition());
@@ -83,9 +88,16 @@ public class PeerBootstrapFunction {
                 DiscoveryResponsePeerEntryPayload discoveryResponsePeerEntryPayload = new DiscoveryResponsePeerEntryPayload();
                 discoveryResponsePeerEntryPayload.setDeviceId(entry.getKey());
                 discoveryResponsePeerEntryPayload.setPeerIPAddress(serialize(peer.deviceIPTable.getTable().get(entry.getKey()).getIpAddress()));
+                discoveryResponsePeerEntryPayload.setPeerTypeId(peer.deviceIPTable.getTable().get(entry.getKey()).getPeerType());
+                discoveryResponsePayload.getPeerEntries().add(discoveryResponsePeerEntryPayload);
             }
 
         }
+
+        // Create DISCOVERY response packet
+
     }
+
+
 
 }
