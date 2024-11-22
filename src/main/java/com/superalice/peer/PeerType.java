@@ -23,9 +23,14 @@ public enum PeerType {
         return null;
     }
 
-//    public static String getPeerType(int id) {
-//
-//    }
+    public static PeerType getPeerType(int id) {
+        for (PeerType type : PeerType.values()) {
+            if (type.id == id) {
+                return type;
+            }
+        }
+        return null;
+    }
 
 
 }
