@@ -6,8 +6,7 @@ import lombok.Data;
 @Data
 public class HandshakePayload {
 
-    private Integer hostIP;
-    private Short hostPort;
+    private byte[] hostIPAddress;
     private Byte peerTypeId;
     private ECIPosition eciPosition;
 

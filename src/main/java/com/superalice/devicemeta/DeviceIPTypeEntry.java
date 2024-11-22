@@ -8,6 +8,6 @@ import java.io.Serializable;
 public class DeviceIPTypeEntry implements Serializable {
 
     private String ipAddress;
-    private String peerType;
+    private Byte peerType;
 
 }

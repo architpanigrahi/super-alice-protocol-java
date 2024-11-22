@@ -27,15 +27,8 @@ public class PeerBootstrapListenerThread implements Runnable {
             while (true) {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 socket.receive(packet);
-
-                DeviceIPTypeEntry deviceIPTypeEntry = new DeviceIPTypeEntry();
-                deviceIPTypeEntry.setIpAddress(packet.getAddress() + ":" + packet.getPort());
-                deviceIPTypeEntry.setPeerType(PeerType.SATELLITE.getName());
-
-                peer.deviceIPTable.getTable().put(new Random().nextInt(10), deviceIPTypeEntry);
-
-                String received = new String(packet.getData(), 0, packet.getLength());
-                log.info("Received: {} from {}:{}", received, packet.getAddress(), packet.getPort());
+                byte[] packetDataByteArray = packet.getData();
+                BootstrapFunction.handleRequest(packetDataByteArray, peer);
             }
 
         } catch (Exception e) {

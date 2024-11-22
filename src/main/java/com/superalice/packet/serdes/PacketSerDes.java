@@ -12,7 +12,7 @@ public class PacketSerDes {
      * @param packet
      * @return
      */
-    public byte[] serialize(Packet packet) {
+    public static byte[] serialize(Packet packet) {
         ByteBuffer buffer = ByteBuffer.allocate(32 + packet.getPayload().length);
         buffer.putInt(packet.getSourceId());
         buffer.putInt(packet.getDestinationId());
@@ -29,7 +29,7 @@ public class PacketSerDes {
         return buffer.array();
     }
 
-    public Packet deserialize(byte[] bytes) {
+    public static Packet deserialize(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
         Packet packet = new Packet();
 

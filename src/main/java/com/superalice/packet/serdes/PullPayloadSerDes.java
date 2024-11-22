@@ -15,8 +15,7 @@ public class PullPayloadSerDes implements PayloadSerDes<PullPayload> {
     @Override
     public byte[] serialize(PullPayload payload) {
         ByteBuffer buffer = ByteBuffer.allocate(6);
-        buffer.putInt(payload.getHostIP());
-        buffer.putShort(payload.getHostPort());
+        buffer.put(payload.getHostIPAddress());
         return buffer.array();
     }
 
@@ -29,8 +28,9 @@ public class PullPayloadSerDes implements PayloadSerDes<PullPayload> {
     public PullPayload deserialize(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
         PullPayload payload = new PullPayload();
-        payload.setHostIP(buffer.getInt());
-        payload.setHostPort(buffer.getShort());
+        byte[] hostIPBytes = new byte[6];
+        buffer.get(hostIPBytes);
+        payload.setHostIPAddress(hostIPBytes);
         return payload;
     }
 }

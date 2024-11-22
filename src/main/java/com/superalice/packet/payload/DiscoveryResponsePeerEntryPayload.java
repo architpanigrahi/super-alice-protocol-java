@@ -8,8 +8,7 @@ public class DiscoveryResponsePeerEntryPayload {
 
     private Integer deviceId;
     private Byte peerTypeId;
-    private Integer peerIP;
-    private Short peerPort;
+    private byte[] peerIPAddress;
 
 
 }

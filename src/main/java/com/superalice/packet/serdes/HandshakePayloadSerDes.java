@@ -15,8 +15,7 @@ public class HandshakePayloadSerDes implements PayloadSerDes<HandshakePayload> {
      */
     @Override
     public byte[] serialize(HandshakePayload payload) {
-        int hostIP = payload.getHostIP();
-        short hostPort = payload.getHostPort();
+        byte[] hostIPAddress = payload.getHostIPAddress();
         byte peerTypeId = payload.getPeerTypeId();
 
         ECIPosition eciPosition = payload.getEciPosition();
@@ -25,8 +24,7 @@ public class HandshakePayloadSerDes implements PayloadSerDes<HandshakePayload> {
         double z = eciPosition != null && eciPosition.getZ() != null ? eciPosition.getZ() : 0.0;
 
         ByteBuffer buffer = ByteBuffer.allocate(31);
-        buffer.putInt(hostIP);
-        buffer.putShort(hostPort);
+        buffer.put(hostIPAddress);
         buffer.put(peerTypeId);
         buffer.putDouble(x);
         buffer.putDouble(y);
@@ -45,8 +43,9 @@ public class HandshakePayloadSerDes implements PayloadSerDes<HandshakePayload> {
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
         HandshakePayload payload = new HandshakePayload();
 
-        payload.setHostIP(buffer.getInt());
-        payload.setHostPort(buffer.getShort());
+        byte[] hostIPBytes = new byte[6];
+        buffer.get(hostIPBytes);
+        payload.setHostIPAddress(hostIPBytes);
         payload.setPeerTypeId(buffer.get());
 
         ECIPosition eciPosition = new ECIPosition();

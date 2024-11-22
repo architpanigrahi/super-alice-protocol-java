@@ -24,8 +24,7 @@ public class DiscoveryResponsePayloadSerDes implements PayloadSerDes<DiscoveryRe
         for (int i = 0; i < noOfEntries; i++) {
             buffer.putInt(payload.getPeerEntries().get(i).getDeviceId());
             buffer.put(payload.getPeerEntries().get(i).getPeerTypeId());
-            buffer.putInt(payload.getPeerEntries().get(i).getPeerIP());
-            buffer.putShort(payload.getPeerEntries().get(i).getPeerPort());
+            buffer.put(payload.getPeerEntries().get(i).getPeerIPAddress());
         }
         return buffer.array();
     }
@@ -48,8 +47,9 @@ public class DiscoveryResponsePayloadSerDes implements PayloadSerDes<DiscoveryRe
             DiscoveryResponsePeerEntryPayload peerEntry = new DiscoveryResponsePeerEntryPayload();
             peerEntry.setDeviceId(buffer.getInt());
             peerEntry.setPeerTypeId(buffer.get());
-            peerEntry.setPeerIP(buffer.getInt());
-            peerEntry.setPeerPort(buffer.getShort());
+            byte[] ipBytes = new byte[6];
+            buffer.get(ipBytes);
+            peerEntry.setPeerIPAddress(ipBytes);
 
             payload.getPeerEntries().add(peerEntry);
         }
