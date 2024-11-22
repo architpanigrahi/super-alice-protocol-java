@@ -65,4 +65,12 @@ public class PeerSatelliteFunction {
 
     }
 
+    public static void sendKeepAliveRequest(PeerSatellite peerSatellite) {
+
+    }
+
+    public static void sendDiscoveryRequest(PeerSatellite peerSatellite) {
+
+    }
+
 }

@@ -15,26 +15,39 @@ public class PeerSatellite extends Peer {
     @Override
     public void startPeer() {
 
+        // Send handshake request
         PeerSatelliteFunction.sendHandshakeRequest(this);
 
-//        Thread thread = new Thread(new PeerSatelliteListenerThread(this));
-//        thread.start();
-    }
+        // Listener thread
+        Thread listenerThread = new Thread(new PeerSatelliteListenerThread(this));
+        listenerThread.start();
 
-//    private void sendDiscoveryPacket() {
-//        try (DatagramSocket socket = new DatagramSocket()) {
-//            byte[] packetBytes = SatellitePacketService.createDiscoveryPacket().toString().getBytes();
-//
-//            InetAddress bootstrapAddress = InetAddress.getByName(this.getBootstrapAddress().split(":")[0]);
-//            DatagramPacket discoveryPacket = new DatagramPacket(packetBytes, packetBytes.length, bootstrapAddress,
-//                    Integer.parseInt(this.getBootstrapAddress().split(":")[1]));
-//
-//            log.info("Sending Discovery Packet {}", discoveryPacket);
-//            socket.send(discoveryPacket);
-//
-//        } catch (Exception e) {
-//
-//        }
-//    }
+        // Keep alive thread
+        Thread keepAliveThread = new Thread(() -> {
+            while (true) {
+                PeerSatelliteFunction.sendKeepAliveRequest(this);
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    log.error("Thread interrupted", e);
+                }
+            }
+        });
+        keepAliveThread.start();
+
+        // Discovery thread
+        Thread discoveryThread = new Thread(() -> {
+            while (true) {
+                PeerSatelliteFunction.sendDiscoveryRequest(this);
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    log.error("Thread interrupted", e);
+                }
+            }
+        });
+        discoveryThread.start();
+
+    }
 
 }

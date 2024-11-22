@@ -14,8 +14,10 @@ public class PeerBootstrap extends Peer {
 
     @Override
     public void startPeer() {
-        Thread thread = new Thread(new PeerBootstrapListenerThread(this));
-        thread.start();
+
+        // Listener Thread
+        Thread listenerThread = new Thread(new PeerBootstrapListenerThread(this));
+        listenerThread.start();
 
         // TODO : Remove this later
         Thread thread1 = new Thread(() -> {
